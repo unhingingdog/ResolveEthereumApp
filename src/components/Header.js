@@ -1,7 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default ({ loggedIn }) => {
+export default ({ user }) => {
+  let output
+
+  if (user === 'NONE') {
+    output = "Log into Metamask"
+  } else {
+    output = "Logged in"
+  }
+
   return(
     <div style={styles.headerContainer}>
       <div style={styles.headerButton}>
@@ -9,7 +17,7 @@ export default ({ loggedIn }) => {
       </div>
       <div></div>
       <div style={styles.headerButton}>
-        <h3>{loggedIn ? 'Logged in' : 'Log into Metamask'}</h3>
+        <h3>{ user ? output : 'Loading' }</h3>
       </div>
     </div>
   )

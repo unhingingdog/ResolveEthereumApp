@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import setUserAndDisputes from './setUserAndDisputes'
+import setUser from './setUser'
 import getDisputeDetails from './getDisputeDetails'
 import getIssueDetails from './getIssueDetails'
 
 export default combineReducers({
-	userAndDisputes: setUserAndDisputes,
-	disputeDetails: getDisputeDetails,
-	issueDetails: getIssueDetails
+	user: setUser,
+	dispute: getDisputeDetails,
+	issue: getIssueDetails
 })

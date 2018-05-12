@@ -1,20 +1,23 @@
 import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
-import { getDisputeDetails, getIssueDetails } from '../actions/contractActions'
+import { getDisputeDetails } from '../actions/contractActions'
+
+import Issue from './Issue'
 
 class Dispute extends Component {
 
-
   render() {
-    const { initiator, respondent } = this.props
+      console.log(this.props)
+    const { address } = this.props.match.params
 
-    console.log(this.props)
+    const { initiator, respondent, issuesCount } = this.props
     return(
       <div>
         <h2>Initiator: {initiator}</h2>
         <h2>respondent: {respondent}</h2>
-        <p>{this.props.issue['0']}</p>
+        <h2>issues: {issuesCount} </h2>
+        <Issue disputeAddress={address} />
       </div>
     )
   }
@@ -22,19 +25,17 @@ class Dispute extends Component {
   async componentDidMount() {
     const disputeAddress = this.props.match.params.address
     this.props.getDisputeDetails(disputeAddress)
-    this.props.getIssueDetails(disputeAddress)
   }
 }
 
 const mapStateToProps = state => {
 	return {
-    initiator: state.disputeDetails.parties[0],
-    respondent: state.disputeDetails.parties[1],
-    issue: state.issueDetails
+    initiator: state.dispute.disputeDetails[0],
+    respondent: state.dispute.disputeDetails[1],
+    issuesCount: state.dispute.disputeDetails[2]
   }
 }
 
 export default connect(mapStateToProps, {
-  getDisputeDetails,
-  getIssueDetails
+  getDisputeDetails
 })(Dispute)

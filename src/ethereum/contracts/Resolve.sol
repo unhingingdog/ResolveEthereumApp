@@ -17,7 +17,6 @@ contract DisputeFactory {
 contract Dispute {
     struct Issue {
         string title;
-        string description;
         address submitter;
         address acceptor;
         address arbitrator;
@@ -45,7 +44,6 @@ contract Dispute {
 
     function createIssue(
         string _title,
-        string _description,
         address _arbitrator,
         uint _arbitratorFee
     ) public restricted payable {
@@ -59,7 +57,6 @@ contract Dispute {
 
         Issue memory newIssue = Issue({
             title: _title,
-            description: _description,
             submitter: msg.sender,
             acceptor: _acceptor,
             arbitrator: _arbitrator,
@@ -111,7 +108,8 @@ contract Dispute {
         address,
         uint,
         bool,
-        bool
+        bool,
+        uint
     ){
         return (
             issues[_issueIndex].title,
@@ -120,7 +118,8 @@ contract Dispute {
             issues[_issueIndex].arbitrator,
             issues[_issueIndex].arbitratorFee,
             issues[_issueIndex].accepted,
-            issues[_issueIndex].resolved
+            issues[_issueIndex].resolved,
+            issues[_issueIndex].funds
         );
     }
 

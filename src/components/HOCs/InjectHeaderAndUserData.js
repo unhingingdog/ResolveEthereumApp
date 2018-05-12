@@ -12,21 +12,22 @@ export default function(ComposedComponent) {
     render() {
       return(
         <div>
-          <Header loggedIn={!!this.props.user} />
+          <Header user={this.props.user} />
           <ComposedComponent {...this.props} />
         </div>
       )
     }
 
     componentDidMount() {
-      if (!this.props.user) this.props.setUser()
+      const { user, setUser } = this.props
+
+      if (!user) setUser()
     }
   }
 
   const mapStateToProps = state => {
   	return {
-  		user: state.userAndDisputes.user,
-      disputes: state.userAndDisputes.disputes
+  		user: state.user
     }
   }
 

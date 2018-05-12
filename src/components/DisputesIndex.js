@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 
 import { setDisputes } from '../actions/contractActions'
 
-import
-
 class DisputesIndex extends Component {
   render() {
     return(
@@ -16,21 +14,25 @@ class DisputesIndex extends Component {
 
   componentDidMount() {
     const { disputes, setDisputes, user } = this.props
-
-    if (!disputes) setDisputes(user)
+    setDisputes(user)
   }
 
   renderDisputes = () => {
     return this.props.disputes.map((dispute, key) => {
       const url = `/dispute/${dispute}`
-      return <Link to={url}><h3 key={key}>{dispute}</h3></Link>
+
+      return(
+        <Link to={url}>
+          <h3 key={key}>{dispute}</h3>
+        </Link>
+      )
     })
   }
 }
 
 const mapStateToProps = state => {
 	return {
-    disputes: state.userAndDisputes.disputes
+    disputes: state.disputeDetails.disputes
   }
 }
 

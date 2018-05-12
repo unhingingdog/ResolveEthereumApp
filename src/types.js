@@ -1,0 +1,5 @@
+export const SET_USER = 'setUser'
+export const SET_DISPUTES = 'setDisputes'
+export const GET_DISPUTE = 'currentDispute'
+export const GET_PARTIES = 'getParties'
+export const GET_ISSUE = 'getIssue'

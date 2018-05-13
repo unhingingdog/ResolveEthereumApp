@@ -6,7 +6,8 @@ import {
 
 const initial_state = {
   currentDispute: null,
-  disputeDetails: []
+  disputeDetails: [],
+  disputes: []
 }
 
 export default (state = initial_state, action) => {

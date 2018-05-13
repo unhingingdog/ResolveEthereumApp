@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { setDisputes } from '../actions/contractActions'
 
 class DisputesIndex extends Component {
+
   render() {
     return(
         <h2>{!this.props.disputes ? "loading" : this.renderDisputes()}</h2>
@@ -13,8 +14,7 @@ class DisputesIndex extends Component {
   }
 
   componentDidMount() {
-    const { disputes, setDisputes, user } = this.props
-    setDisputes(user)
+    this.props.setDisputes(this.props.user)
   }
 
   renderDisputes = () => {
@@ -32,7 +32,7 @@ class DisputesIndex extends Component {
 
 const mapStateToProps = state => {
 	return {
-    disputes: state.disputeDetails.disputes
+    disputes: state.dispute.disputes
   }
 }
 

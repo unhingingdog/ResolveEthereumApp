@@ -4,7 +4,7 @@ import {
   SET_DISPUTES,
   GET_DISPUTE,
   GET_DISPUTE_DETAILS,
-  GET_ISSUE
+  GET_ISSUES
 } from '../types'
 import factory from '../ethereum/factory'
 import Dispute from '../ethereum/Dispute'
@@ -52,11 +52,39 @@ export const getDisputeDetails = address => {
   }
 }
 
-export const getIssueDetails = (address, index) => {
+export const getIssues = address => {
   return async dispatch => {
     const dispute = Dispute(address)
-    const issue = await dispute.methods.getIssue(index).call()
+    
+    const emptyIssuesArray = '0'.repeat(
+      await dispute.methods.getIssuesCount().call()
+    ).split('')
 
-    dispatch({ type: GET_ISSUE, payload: issue })
+    const payload = await getIssuesDetails(dispute, emptyIssuesArray)
+
+    dispatch({ type: GET_ISSUES, payload })
+  }
+}
+
+//getIssues helper methods
+
+const getIssuesDetails = (dispute, issuesArray) => {
+  return Promise.all(issuesArray.map(
+    (issue, index) => getIssueDetails(dispute, index))
+  ).then(issues => issues)
+}
+
+const getIssueDetails = async (dispute, index) => {
+  const contractIssueOutput = await dispute.methods.getIssue(index).call()
+
+  return {
+    title: contractIssueOutput[0],
+    submitter: contractIssueOutput[1],
+    acceptor: contractIssueOutput[2],
+    arbitrator: contractIssueOutput[3],
+    arbitratorFee: contractIssueOutput[4],
+    accepted: contractIssueOutput[5],
+    resolved: contractIssueOutput[6],
+    funds: 'todo'
   }
 }

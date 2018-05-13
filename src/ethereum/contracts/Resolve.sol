@@ -108,8 +108,7 @@ contract Dispute {
         address,
         uint,
         bool,
-        bool,
-        uint
+        bool
     ){
         return (
             issues[_issueIndex].title,
@@ -118,9 +117,17 @@ contract Dispute {
             issues[_issueIndex].arbitrator,
             issues[_issueIndex].arbitratorFee,
             issues[_issueIndex].accepted,
-            issues[_issueIndex].resolved,
-            issues[_issueIndex].funds
+            issues[_issueIndex].resolved
         );
+    }
+
+    function showIssueFunds (uint _issueIndex) public constant returns (uint) {
+        require(
+            msg.sender == initiator||
+            msg.sender == respondent ||
+            msg.sender == issues[_issueIndex].arbitrator
+        );
+        return issues[_issueIndex].funds;
     }
 
     function getIssuesCount() public constant returns (uint count) {

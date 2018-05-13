@@ -73,7 +73,6 @@ describe('Issue', () => {
 
     await dispute.methods.createIssue(
       "Stock Quote Inaccurate",
-      "The estimate of the stock in trade was alledly misrepresented...",
       arbitratorAccount,
       web3.utils.toWei('0.5', 'ether')
     )
@@ -94,10 +93,6 @@ describe('Issue', () => {
     assert.equal(
       issue.title,
       "Stock Quote Inaccurate"
-    )
-    assert.equal(
-      issue.description.split(' ')[4],
-      "stock"
     )
     assert.equal(issue.submitter, issueInitiator)
     assert.equal(issue.acceptor, issueAcceptor)

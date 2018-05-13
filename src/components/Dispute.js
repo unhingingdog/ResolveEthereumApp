@@ -8,7 +8,6 @@ import Issue from './Issue'
 class Dispute extends Component {
 
   render() {
-      console.log(this.props)
     const { address } = this.props.match.params
 
     const { initiator, respondent, issuesCount } = this.props
@@ -17,7 +16,7 @@ class Dispute extends Component {
         <h2>Initiator: {initiator}</h2>
         <h2>respondent: {respondent}</h2>
         <h2>issues: {issuesCount} </h2>
-        <Issue disputeAddress={address} />
+        <Issue disputeAddress={address} issuesCount={issuesCount} />
       </div>
     )
   }

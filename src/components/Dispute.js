@@ -13,6 +13,7 @@ class Dispute extends Component {
     const { initiator, respondent, issuesCount } = this.props
     return(
       <div>
+        <h1>{this.props.loading}</h1>
         <h2>Initiator: {initiator}</h2>
         <h2>respondent: {respondent}</h2>
         <h2>issues: {issuesCount} </h2>
@@ -31,10 +32,10 @@ const mapStateToProps = state => {
 	return {
     initiator: state.dispute.disputeDetails[0],
     respondent: state.dispute.disputeDetails[1],
-    issuesCount: state.dispute.disputeDetails[2]
+    issuesCount: state.dispute.disputeDetails[2],
   }
 }
 
 export default connect(mapStateToProps, {
-  getDisputeDetails
+  getDisputeDetails,
 })(Dispute)

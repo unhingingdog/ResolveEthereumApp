@@ -4,8 +4,14 @@ import {
   SET_DISPUTES,
   GET_DISPUTE,
   GET_DISPUTE_DETAILS,
-  GET_ISSUES
+  GET_ISSUES,
+  LOADING_START,
+  LOADING_STOP,
+  LOADING_DISPUTES,
+  LOADING_ISSUES,
+  LOADED
 } from '../types'
+
 import factory from '../ethereum/factory'
 import Dispute from '../ethereum/Dispute'
 import web3 from '../ethereum/web3'
@@ -22,6 +28,7 @@ export const setUser = () => {
 
 export const setDisputes = user => {
   return async dispatch => {
+    dispatch({ type: LOADING_START, payload: LOADING_DISPUTES })
 
     if (!user) {
       const users = await web3.eth.getAccounts()
@@ -34,11 +41,14 @@ export const setDisputes = user => {
     disputes.map(dispute => disputesInArrayForm.push(dispute))
 
     dispatch({ type: SET_DISPUTES, payload: disputesInArrayForm })
+    dispatch({ type: LOADING_STOP })
   }
 }
 
 export const getDisputeDetails = address => {
   return async dispatch => {
+    dispatch({ type: LOADING_START, payload: LOADING_DISPUTES })
+    
     const dispute = Dispute(address)
     const initiator = await dispute.methods.initiator().call()
     const respondent = await dispute.methods.respondent().call()
@@ -49,13 +59,15 @@ export const getDisputeDetails = address => {
       respondent,
       issueCount
     ]})
+    dispatch({ type: LOADING_STOP })
   }
 }
 
 export const getIssues = address => {
   return async dispatch => {
+    dispatch({ type: LOADING_START, payload: LOADING_ISSUES })
+
     const dispute = Dispute(address)
-    
     const emptyIssuesArray = '0'.repeat(
       await dispute.methods.getIssuesCount().call()
     ).split('')
@@ -63,6 +75,7 @@ export const getIssues = address => {
     const payload = await getIssuesDetails(dispute, emptyIssuesArray)
 
     dispatch({ type: GET_ISSUES, payload })
+    dispatch({ type: LOADING_STOP })
   }
 }
 
@@ -76,7 +89,6 @@ const getIssuesDetails = (dispute, issuesArray) => {
 
 const getIssueDetails = async (dispute, index) => {
   const contractIssueOutput = await dispute.methods.getIssue(index).call()
-
   return {
     title: contractIssueOutput[0],
     submitter: contractIssueOutput[1],

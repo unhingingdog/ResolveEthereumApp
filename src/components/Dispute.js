@@ -10,14 +10,15 @@ class Dispute extends Component {
   render() {
     const { address } = this.props.match.params
 
-    const { initiator, respondent, issuesCount } = this.props
+    const { initiator, respondent, issuesCount, loading } = this.props
+    
     return(
       <div>
         <h1>{this.props.loading}</h1>
         <h2>Initiator: {initiator}</h2>
         <h2>respondent: {respondent}</h2>
         <h2>issues: {issuesCount} </h2>
-        <Issue disputeAddress={address} issuesCount={issuesCount} />
+        <Issue disputeAddress={address} loading={loading} />
       </div>
     )
   }

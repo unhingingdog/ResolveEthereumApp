@@ -3,13 +3,18 @@ import {
   SET_USER,
   SET_DISPUTES,
   GET_DISPUTE,
+  CREATE_DISPUTE,
   GET_DISPUTE_DETAILS,
+  CREATE_ISSUE,
   GET_ISSUES,
   LOADING_START,
   LOADING_STOP,
   LOADING_DISPUTES,
   LOADING_ISSUES,
-  LOADED
+  CREATING_DISPUTE,
+  CREATING_ISSUE,
+  LOADED,
+  NO_USER
 } from '../types'
 
 import factory from '../ethereum/factory'
@@ -17,14 +22,18 @@ import Dispute from '../ethereum/Dispute'
 import web3 from '../ethereum/web3'
 import reducers from '../reducers'
 
+//User
+
 export const setUser = () => {
   return async dispatch => {
     const users = await web3.eth.getAccounts()
-    const user = users[0] || 'NONE'
+    const user = users[0] || NO_USER
 
     dispatch({ type: SET_USER, payload: user })
   }
 }
+
+//Disputes
 
 export const setDisputes = user => {
   return async dispatch => {
@@ -48,7 +57,7 @@ export const setDisputes = user => {
 export const getDisputeDetails = address => {
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: LOADING_DISPUTES })
-    
+
     const dispute = Dispute(address)
     const initiator = await dispute.methods.initiator().call()
     const respondent = await dispute.methods.respondent().call()
@@ -63,6 +72,49 @@ export const getDisputeDetails = address => {
   }
 }
 
+export const createDispute = (userAddress, respondentAddress) => {
+  return async dispatch => {
+      dispatch({ type: LOADING_START, payload: CREATING_DISPUTE })
+      console.log('creating dispute ', respondentAddress)
+
+      try {
+        await factory.methods.createDispute(respondentAddress).send({
+          from: userAddress,
+        })
+        console.log('transaction complete')
+      } catch(error) {
+        console.log(error)
+      }
+
+      dispatch({ type: LOADING_STOP })
+  }
+}
+
+//Issues
+
+export const createIssue = (
+  userAddress,
+  disputeAddress,
+  title,
+  arbitratorAddress,
+  arbitratorFee
+) => {
+  return async dispatch => {
+    dispatch({ type: LOADING_START, payload: CREATING_ISSUE })
+    const dispute = await Dispute(disputeAddress)
+
+    try {
+      await dispute.methods.createIssue
+        .call(title, arbitratorAddress, arbitratorFee)
+        .send({ from: userAddress })
+    } catch (error) {
+      console.log(error)
+    }
+
+    dispatch({ type: LOADING_STOP })
+  }
+}
+
 export const getIssues = address => {
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: LOADING_ISSUES })
@@ -72,7 +124,7 @@ export const getIssues = address => {
       await dispute.methods.getIssuesCount().call()
     ).split('')
 
-    const payload = await getIssuesDetails(dispute, emptyIssuesArray)
+    const payload = await getListOfIssues(dispute, emptyIssuesArray)
 
     dispatch({ type: GET_ISSUES, payload })
     dispatch({ type: LOADING_STOP })
@@ -81,10 +133,12 @@ export const getIssues = address => {
 
 //getIssues helper methods
 
-const getIssuesDetails = (dispute, issuesArray) => {
+const getListOfIssues = (dispute, issuesArray) => {
   return Promise.all(issuesArray.map(
     (issue, index) => getIssueDetails(dispute, index))
-  ).then(issues => issues)
+  )
+    .then(issues => issues)
+    .catch(error => console.log(error))
 }
 
 const getIssueDetails = async (dispute, index) => {

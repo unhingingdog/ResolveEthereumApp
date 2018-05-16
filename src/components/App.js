@@ -6,6 +6,7 @@ import HomePage from './HomePage'
 import DisputesIndex from './DisputesIndex'
 import NewDispute from './NewDispute'
 import Dispute from './Dispute'
+import NewIssue from './NewIssue'
 import InjectHeaderAndUserData from './HOCs/InjectHeaderAndUserData'
 
 export default () => {
@@ -20,6 +21,10 @@ export default () => {
         <Route
           exact path="/new"
           component={InjectHeaderAndUserData(NewDispute)}
+        />
+        <Route
+          exact path="/dispute/:address/issue"
+          component={InjectHeaderAndUserData(NewIssue)}
         />
         <Route
           exact path="/disputes"

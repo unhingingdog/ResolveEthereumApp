@@ -95,23 +95,52 @@ export const createDispute = (userAddress, respondentAddress) => {
 export const createIssue = (
   userAddress,
   disputeAddress,
-  title,
+  issueTitle,
+  stake,
   arbitratorAddress,
   arbitratorFee
 ) => {
+  console.log('CREATE ISSUE FIRED')
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: CREATING_ISSUE })
     const dispute = await Dispute(disputeAddress)
 
+    console.log(web3.utils.toWei(arbitratorFee, 'ether'))
+
     try {
+      console.log(dispute.methods.createIssue)
       await dispute.methods.createIssue
-        .call(title, arbitratorAddress, arbitratorFee)
-        .send({ from: userAddress })
+        .call(0,
+          issueTitle,
+          arbitratorAddress,
+          web3.utils.toWei(arbitratorFee, 'ether')
+        )
+        .send({
+          from: userAddress,
+          value: web3.utils.toWei(stake, 'ether')
+         })
+        console.log('issue deployed')
+
     } catch (error) {
       console.log(error)
     }
 
     dispatch({ type: LOADING_STOP })
+  }
+}
+
+export const acceptIssue = disputeAddress => {
+  return async dispatch => {
+    console.log('FIRED')
+    const dispute = Dispute(disputeAddress)
+
+  }
+}
+
+export const settleIssue = (disputeAddress, winnerAddress, award) => {
+  return async dispatch => {
+    const dispute = Dispute(disputeAddress)
+    // await dispute.methods.settleIssue
   }
 }
 

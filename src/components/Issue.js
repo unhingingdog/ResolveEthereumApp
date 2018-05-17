@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
-import { LOADED } from '../types'
 
-import { getIssues } from '../actions/contractActions'
+import { LOADED } from '../types'
+import {
+  getIssues,
+  acceptIssue,
+  settleIssue
+} from '../actions/contractActions'
 
 class Issue extends Component {
   render() {
@@ -21,13 +25,11 @@ class Issue extends Component {
       return <p>No issues submitted yet</p>
     }
 
-    if (loading != LOADED) return <p>Loading</p>
+    if (loading !== LOADED) return <p>Loading</p>
 
-    console.log(issues)
-
-    return issues.map(issue => {
+    return issues.map((issue, index) => {
       return(
-        <div>
+        <div key={index + '-' + this.props.disputeAddress}>
           <h3>Issue: {issue.title}</h3>
           <h3>submitter: {issue.submitter}</h3>
           <h3>acceptor: {issue.acceptor}</h3>
@@ -36,9 +38,24 @@ class Issue extends Component {
           <h3>accepted: {issue.accepted ? 'true' : 'false'}</h3>
           <h3>resolved: {issue.resolved ? 'true' : 'false'}</h3>
           <h3>funds: {issue.funds}</h3>
+          <button id={index} onClick={this.acceptIssue}>accept</button>
+          <button id={index} onClick={this.acceptIssue}>settle</button>
         </div>
       )
     })
+  }
+
+  acceptIssue = event => {
+    console.log(event.target.id)
+    const { acceptIssue, disputeAddress } = this.props
+    const { id: issueIndex } = event.target
+    acceptIssue(disputeAddress, issueIndex)
+  }
+
+  settleIssue = event => {
+  //   const { disputeAddress, settleIssue } = this.props
+  //   const { issueIndex } = event.target
+  //   settleIssue(disputeAddress, issueIndex, winnerAddress, award)
   }
 }
 
@@ -49,5 +66,7 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, {
-  getIssues
+  getIssues,
+  acceptIssue,
+  settleIssue
 })(Issue)

@@ -30,9 +30,18 @@ class NewIssue extends Component {
             />
           </label>
           <label>
+            Stake (in ether):
+            <input
+              type="number"
+              id="stake"
+              value={this.state.stake}
+              onChange={this.handleInputChange}
+            />
+          </label>
+          <label>
             Arbitrator fee:
             <input
-              type="text"
+              type="number"
               id="arbitratorFee"
               value={this.state.arbitratorFee}
               onChange={this.handleInputChange}
@@ -50,11 +59,13 @@ class NewIssue extends Component {
     this.state = {
       issueTitle: '',
       arbitratorAddress: '',
+      stake: 0,
       arbitratorFee: 0
     }
   }
 
   handleInputChange = event => {
+    console.log(this.state.stake)
     const { id, value } = event.target
     this.setState({ [id]: value })
   }
@@ -62,12 +73,18 @@ class NewIssue extends Component {
   handleSubmit = event => {
     event.preventDefault()
 
-    if (this.state.respondentAddress.length > 41) {
-      this.props.createDispute(this.props.user, this.state.respondentAddress)
-      this.setState({ respondentAddress: 'submitted' })
-    } else {
-      this.setState({ respondentAddress: 'Invalid' })
-    }
+    const { issueTitle, arbitratorAddress, stake, arbitratorFee } = this.state
+    const { user, createIssue } = this.props
+    const { address: disputeAddress } = this.props.match.params
+
+      createIssue(
+        user,
+        disputeAddress,
+        issueTitle,
+        stake,
+        arbitratorAddress,
+        arbitratorFee
+      )
   }
 }
 

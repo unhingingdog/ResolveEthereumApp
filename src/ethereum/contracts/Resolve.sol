@@ -102,32 +102,27 @@ contract Dispute {
     }
 
     function getIssue(uint _issueIndex) public constant returns (
-        string,
         address,
         address,
         address,
         uint,
         bool,
-        bool
+        bool,
+        uint
     ){
         return (
-            issues[_issueIndex].title,
             issues[_issueIndex].submitter,
             issues[_issueIndex].acceptor,
             issues[_issueIndex].arbitrator,
             issues[_issueIndex].arbitratorFee,
             issues[_issueIndex].accepted,
-            issues[_issueIndex].resolved
+            issues[_issueIndex].resolved,
+            issues[_issueIndex].funds
         );
     }
 
-    function showIssueFunds (uint _issueIndex) public constant returns (uint) {
-        require(
-            msg.sender == initiator||
-            msg.sender == respondent ||
-            msg.sender == issues[_issueIndex].arbitrator
-        );
-        return issues[_issueIndex].funds;
+    function getIssueTitle(uint _issueIndex) public constant returns (string title) {
+        return issues[_issueIndex].title;
     }
 
     function getIssuesCount() public constant returns (uint count) {

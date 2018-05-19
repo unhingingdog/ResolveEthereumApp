@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 import { createIssue } from '../actions/contractActions'
 
 class NewIssue extends Component {
   render() {
+
+    if (this.submissionIsComplete()) {
+      return <Redirect to={`/dispute/${this.props.match.params.address}`} />
+    }
 
     return(
       <div>
@@ -60,12 +65,14 @@ class NewIssue extends Component {
       issueTitle: '',
       arbitratorAddress: '',
       stake: 0,
-      arbitratorFee: 0
+      arbitratorFee: 0,
+      submissionComplete: false
     }
   }
 
+  submissionIsComplete = () => this.state.submissionComplete
+
   handleInputChange = event => {
-    console.log(this.state.stake)
     const { id, value } = event.target
     this.setState({ [id]: value })
   }
@@ -77,14 +84,16 @@ class NewIssue extends Component {
     const { user, createIssue } = this.props
     const { address: disputeAddress } = this.props.match.params
 
-      createIssue(
-        user,
-        disputeAddress,
-        issueTitle,
-        stake,
-        arbitratorAddress,
-        arbitratorFee
-      )
+    createIssue(
+      user,
+      disputeAddress,
+      issueTitle,
+      stake,
+      arbitratorAddress,
+      arbitratorFee
+    )
+
+    this.setState({ submissionComplete: true })
   }
 }
 

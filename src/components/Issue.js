@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
+import web3 from '../ethereum/web3'
 
 import { LOADED } from '../types'
 import {
@@ -14,8 +15,16 @@ class Issue extends Component {
     return this.renderIssueDetails(this.props.issues)
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      awardAmount: 0
+    }
+  }
+
   async componentDidMount() {
-    this.props.getIssues(this.props.disputeAddress)
+    return this.props.getIssues(this.props.disputeAddress)
   }
 
   renderIssueDetails = issues => {
@@ -28,34 +37,67 @@ class Issue extends Component {
     if (loading !== LOADED) return <p>Loading</p>
 
     return issues.map((issue, index) => {
+      console.log('SETTLED:', issue.settled)
       return(
         <div key={index + '-' + this.props.disputeAddress}>
           <h3>Issue: {issue.title}</h3>
           <h3>submitter: {issue.submitter}</h3>
           <h3>acceptor: {issue.acceptor}</h3>
           <h3>arbitrator: {issue.arbitrator}</h3>
-          <h3>arbitratorFee: {issue.arbitratorFee}</h3>
+          <h3>arbitratorFee: {web3.utils.fromWei(issue.arbitratorFee)} eth</h3>
           <h3>accepted: {issue.accepted ? 'true' : 'false'}</h3>
           <h3>resolved: {issue.resolved ? 'true' : 'false'}</h3>
-          <h3>funds: {issue.funds}</h3>
+          <h3>funds: {web3.utils.fromWei(issue.funds, 'ether')} eth</h3>
           <button id={index} onClick={this.acceptIssue}>accept</button>
-          <button id={index} onClick={this.acceptIssue}>settle</button>
+          <input
+            type="number"
+            value={this.state.awardAmount}
+            onChange={this.handleInputChange}
+            id="awardAmount"
+          />
+          Settle
+          <button
+            id={index}
+            onClick={e => this.settleIssue(e, issue.submitter)}
+          >
+            submitter ({issue.submitter})
+          </button>
+          <button
+            id={index}
+            onClick={e => this.settleIssue(e, issue.acceptor)}
+          >
+            acceptor ({issue.acceptor})
+          </button>
         </div>
       )
     })
   }
 
-  acceptIssue = event => {
-    console.log(event.target.id)
-    const { acceptIssue, disputeAddress } = this.props
-    const { id: issueIndex } = event.target
-    acceptIssue(disputeAddress, issueIndex)
+  handleInputChange = event => {
+    const { id, value } = event.target
+    this.setState({ [id]: value })
   }
 
-  settleIssue = event => {
-  //   const { disputeAddress, settleIssue } = this.props
-  //   const { issueIndex } = event.target
-  //   settleIssue(disputeAddress, issueIndex, winnerAddress, award)
+  acceptIssue = event => {
+    const { acceptIssue, disputeAddress, userAddress, issues } = this.props
+    const { id: issueIndex } = event.target
+    const stake = issues[issueIndex].funds
+
+    acceptIssue(userAddress, disputeAddress, issueIndex, stake)
+  }
+
+  settleIssue = (event, winnerAddress) => {
+    const { disputeAddress, settleIssue, userAddress } = this.props
+    const { id: issueIndex } = event.target
+    const { awardAmount } = this.state
+
+    settleIssue(
+      userAddress,
+      disputeAddress,
+      issueIndex,
+      winnerAddress,
+      awardAmount
+    )
   }
 }
 

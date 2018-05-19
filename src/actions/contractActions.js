@@ -13,6 +13,8 @@ import {
   LOADING_ISSUES,
   CREATING_DISPUTE,
   CREATING_ISSUE,
+  ACCEPTING_ISSUE,
+  SETTLING_ISSUE,
   LOADED,
   NO_USER
 } from '../types'
@@ -79,7 +81,7 @@ export const createDispute = (userAddress, respondentAddress) => {
 
       try {
         await factory.methods.createDispute(respondentAddress).send({
-          from: userAddress,
+          from: userAddress
         })
         console.log('transaction complete')
       } catch(error) {
@@ -108,7 +110,6 @@ export const createIssue = (
     console.log(web3.utils.toWei(arbitratorFee, 'ether'))
 
     try {
-      console.log(dispute.methods.createIssue)
       await dispute.methods.createIssue
         .call(0,
           issueTitle,
@@ -129,18 +130,46 @@ export const createIssue = (
   }
 }
 
-export const acceptIssue = disputeAddress => {
+export const acceptIssue = (userAddress, disputeAddress, issueIndex, stake) => {
   return async dispatch => {
-    console.log('FIRED')
+    dispatch({ type: LOADING_START, payload: ACCEPTING_ISSUE })
     const dispute = Dispute(disputeAddress)
 
+    try {
+      await dispute.methods.acceptIssue(issueIndex).send({
+        from: userAddress,
+        value: stake
+      })
+      dispatch({ type: LOADING_STOP })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
-export const settleIssue = (disputeAddress, winnerAddress, award) => {
+export const settleIssue = (
+  userAddress,
+  disputeAddress,
+  issueIndex,
+  winnerAddress,
+  awardAmount
+) => {
   return async dispatch => {
+    dispatch({ type: LOADING_START, payload: SETTLING_ISSUE })
     const dispute = Dispute(disputeAddress)
-    // await dispute.methods.settleIssue
+    awardAmount = web3.utils.toWei(awardAmount, 'ether')
+
+    try {
+      await dispute.methods.settleIssue(issueIndex, winnerAddress, awardAmount)
+        .send({
+          from: userAddress
+        })
+
+      dispatch({ type: LOADING_STOP })
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 }
 
@@ -164,22 +193,23 @@ export const getIssues = address => {
 
 const getListOfIssues = (dispute, issuesArray) => {
   return Promise.all(issuesArray.map(
-    (issue, index) => getIssueDetails(dispute, index))
-  )
+    (issue, index) => getIssueDetails(dispute, index)
+  ))
     .then(issues => issues)
     .catch(error => console.log(error))
 }
 
 const getIssueDetails = async (dispute, index) => {
   const contractIssueOutput = await dispute.methods.getIssue(index).call()
+  const title = await dispute.methods.getIssueTitle(index).call()
   return {
-    title: contractIssueOutput[0],
-    submitter: contractIssueOutput[1],
-    acceptor: contractIssueOutput[2],
-    arbitrator: contractIssueOutput[3],
-    arbitratorFee: contractIssueOutput[4],
-    accepted: contractIssueOutput[5],
-    resolved: contractIssueOutput[6],
-    funds: 'todo'
+    title,
+    submitter: contractIssueOutput[0],
+    acceptor: contractIssueOutput[1],
+    arbitrator: contractIssueOutput[2],
+    arbitratorFee: contractIssueOutput[3],
+    accepted: contractIssueOutput[4],
+    resolved: contractIssueOutput[5],
+    funds: contractIssueOutput[6]
   }
 }

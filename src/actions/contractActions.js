@@ -41,18 +41,14 @@ export const setDisputes = user => {
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: LOADING_DISPUTES })
 
-    if (!user) {
-      const users = await web3.eth.getAccounts()
-      user = users[0] || 'NONE'
+    if (user === NO_USER) {
+      dispatch({ type: SET_DISPUTES, payload: [] })
+      dispatch({ type: LOADING_STOP })
+    } else {
+      const disputes = await factory.methods.getUserDisputes(user).call()
+      dispatch({ type: SET_DISPUTES, payload: disputes })
+      dispatch({ type: LOADING_STOP })
     }
-
-    const disputes = await factory.methods.getUserDisputes(user).call()
-
-    const disputesInArrayForm = []
-    disputes.map(dispute => disputesInArrayForm.push(dispute))
-
-    dispatch({ type: SET_DISPUTES, payload: disputesInArrayForm })
-    dispatch({ type: LOADING_STOP })
   }
 }
 
@@ -60,17 +56,21 @@ export const getDisputeDetails = address => {
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: LOADING_DISPUTES })
 
-    const dispute = Dispute(address)
-    const initiator = await dispute.methods.initiator().call()
-    const respondent = await dispute.methods.respondent().call()
-    const issueCount = parseInt(await dispute.methods.getIssuesCount().call())
-
-    dispatch({ type: GET_DISPUTE_DETAILS, payload: [
-      initiator,
-      respondent,
-      issueCount
-    ]})
-    dispatch({ type: LOADING_STOP })
+    if (!address) {
+      dispatch({ type: GET_DISPUTE_DETAILS, payload: [] })
+      dispatch({ type: LOADING_STOP })
+    } else {
+      const dispute = Dispute(address)
+      const initiator = await dispute.methods.initiator().call()
+      const respondent = await dispute.methods.respondent().call()
+      const issueCount = parseInt(await dispute.methods.getIssuesCount().call())
+      dispatch({ type: GET_DISPUTE_DETAILS, payload: [
+        initiator,
+        respondent,
+        issueCount
+      ]})
+      dispatch({ type: LOADING_STOP })
+    }
   }
 }
 

@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 import { createDispute } from '../actions/contractActions'
 
 class NewDisupte extends Component {
   render() {
-    console.log(this.state.respondentAddress)
+    if (this.submissionIsComplete()) {
+      return <Redirect to="/disputes" />
+    }
+
     return(
       <div>
         <h1>New Dispute</h1>
@@ -29,9 +33,12 @@ class NewDisupte extends Component {
     super(props)
 
     this.state = {
-      respondentAddress: ''
+      respondentAddress: '',
+      submissionComplete: false
     }
   }
+
+  submissionIsComplete = () => this.state.submissionComplete
 
   handleChange = event => {
     this.setState({ respondentAddress: event.target.value })
@@ -42,7 +49,7 @@ class NewDisupte extends Component {
 
     if (this.state.respondentAddress.length > 41) {
       this.props.createDispute(this.props.user, this.state.respondentAddress)
-      this.setState({ respondentAddress: 'submitted' })
+      this.setState({ submissionComplete: true })
     } else {
       this.setState({ respondentAddress: 'Invalid' })
     }

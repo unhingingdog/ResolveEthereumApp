@@ -8,26 +8,25 @@ import Issue from './Issue'
 class Dispute extends Component {
 
   render() {
+    console.log('DISPUTE PROPS:', this.props)
     const { address } = this.props.match.params
-
-    const { initiator, respondent, issuesCount, loading } = this.props
+    const { initiator, respondent, issuesCount, loading, user } = this.props
 
     return(
       <div>
-        <h1>{this.props.loading}</h1>
         <h2>Initiator: {initiator}</h2>
         <h2>respondent: {respondent}</h2>
         <h2>issues: {issuesCount} </h2>
         <Issue
           disputeAddress={address}
-          loading={loading} 
-          userAddress={this.props.user}
+          loading={loading}
+          userAddress={user}
         />
       </div>
     )
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const disputeAddress = this.props.match.params.address
     this.props.getDisputeDetails(disputeAddress)
   }

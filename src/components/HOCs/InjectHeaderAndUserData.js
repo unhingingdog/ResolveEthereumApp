@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import Redux from 'redux'
 import { connect } from 'react-redux'
 
+import Loading from '../Loading'
+import { LOADED } from '../../types'
 import { setUser } from '../../actions/contractActions'
 
 import Header from '../Header'
@@ -10,12 +12,23 @@ import Header from '../Header'
 export default function(ComposedComponent) {
   class InjectHeaderAndUserData extends Component {
     render() {
-      return(
-        <div>
-          <Header user={this.props.user} />
-          <ComposedComponent {...this.props} />
-        </div>
-      )
+      console.log('HEADER PROPS: ', this.props)
+      console.log(this.props.loading)
+      // if (this.isLoading() === LOADED) {
+        return(
+          <div>
+            <Header user={this.props.user} />
+            <ComposedComponent {...this.props} />
+          </div>
+        )
+      // }
+
+      // return(
+      //   <div>
+      //     <Header user={this.props.user} />
+      //     <Loading status={this.props.loading} />
+      //   </div>
+      // )
     }
 
     componentDidMount() {
@@ -23,6 +36,8 @@ export default function(ComposedComponent) {
 
       if (!user) setUser()
     }
+
+    isLoading = () => this.props.loading
   }
 
   const mapStateToProps = state => {

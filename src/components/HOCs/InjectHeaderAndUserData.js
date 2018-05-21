@@ -12,12 +12,15 @@ import Header from '../Header'
 export default function(ComposedComponent) {
   class InjectHeaderAndUserData extends Component {
     render() {
-      console.log('HEADER PROPS: ', this.props)
-      console.log(this.props.loading)
+
       // if (this.isLoading() === LOADED) {
         return(
           <div>
-            <Header user={this.props.user} />
+            <Header
+              user={this.props.user}
+              active={this.state.activeHeaderItem}
+              changeActive={this.changeActiveHeaderItem}
+            />
             <ComposedComponent {...this.props} />
           </div>
         )
@@ -31,6 +34,11 @@ export default function(ComposedComponent) {
       // )
     }
 
+    constructor(props) {
+      super(props)
+      this.state = { activeHeaderItem: null }
+    }
+
     componentDidMount() {
       const { user, setUser } = this.props
 
@@ -38,6 +46,11 @@ export default function(ComposedComponent) {
     }
 
     isLoading = () => this.props.loading
+
+    changeActiveHeaderItem = event => {
+      console.log(event.target.id)
+      this.setState({ activeHeaderItem: event.target.id })
+    }
   }
 
   const mapStateToProps = state => {

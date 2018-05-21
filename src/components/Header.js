@@ -1,27 +1,44 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Menu } from 'semantic-ui-react'
+import MetamaskColor from '../assets/Metamask-icon-color.png'
+import MetamaskGrey from '../assets/Metamask-icon-greyscale.png'
 
-export default ({ user }) => {
-  let output
+
+export default ({ user, changeActive, active }) => {
+  let metaMaskStatus
 
   if (user === 'NONE') {
-    output = "Log into Metamask"
+    metaMaskStatus = MetamaskGrey
   } else {
-    output = "Logged in"
+    metaMaskStatus = MetamaskColor
   }
 
   return(
-    <div style={styles.headerContainer}>
-      <div style={styles.headerButton}>
-        <h3><Link to="/new">New</Link></h3>
-      </div>
-      <div></div>
-      <div style={styles.headerButton}>
-        <h3>{ user ? output : 'Loading' }</h3>
-      </div>
-    </div>
+    <Menu pointing secondary>
+      <Menu.Item name='Resolve' id='home' active={active === 'home'} onClick={changeActive} />
+      <Menu.Item name='' id='messages' active={active === 'messages'} onClick={changeActive} />
+
+      <Menu.Menu position='right'>
+        <Menu.Item name='Disputes' id='Disputes' active={active === 'Disputes'} onClick={changeActive} />
+        <Menu.Item name='New Dispute' id='New Dispute' active={active === 'New Dispute'} onClick={changeActive} />
+        <Menu.Item name='MetamaskIcon' active={active === 'New Dispute'}>
+          <img src={metaMaskStatus} alt="metamask icon" height="30" width="21" />
+        </Menu.Item>
+      </Menu.Menu>
+    </Menu>
   )
 }
+
+// <div style={styles.headerContainer}>
+//   <div style={styles.headerButton}>
+//     <h3><Link to="/new">New</Link></h3>
+//   </div>
+//   <div></div>
+//   <div style={styles.headerButton}>
+//     <h3>{ user ? metaMaskStatus : 'Loading' }</h3>
+//   </div>
+// </div>
 
 const styles = {
   headerContainer: {

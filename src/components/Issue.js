@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
 import web3 from '../ethereum/web3'
+import Spinner from 'react-spinkit'
 
-import { LOADED } from '../types'
+import { LOADED, LOADING_ISSUES } from '../types'
 import {
   getIssues,
   acceptIssue,
@@ -12,6 +13,8 @@ import {
 
 class Issue extends Component {
   render() {
+    if (this.props.loading === LOADING_ISSUES) <p>loading</p>
+
     return this.renderIssueDetails(this.props.issues)
   }
 
@@ -30,14 +33,7 @@ class Issue extends Component {
   renderIssueDetails = issues => {
     const { loading } = this.props
 
-    if (loading === LOADED && issues.length === 0) {
-      return <p>No issues submitted yet</p>
-    }
-
-    if (loading !== LOADED) return <p>Loading</p>
-
     return issues.map((issue, index) => {
-      console.log('SETTLED:', issue.settled)
       return(
         <div key={index + '-' + this.props.disputeAddress}>
           <h3>Issue: {issue.title}</h3>

@@ -10,6 +10,7 @@ import { setDisputes } from '../actions/contractActions'
 
 class DisputesIndex extends Component {
   render() {
+    console.log(this.props.disputes)
 
     if (this.props.user === NO_USER) {
       return <Redirect to="/" />
@@ -22,10 +23,7 @@ class DisputesIndex extends Component {
 
   componentDidMount() {
     const { disputes, setDisputes, user } = this.props
-
-    if (!disputes || disputes.length === 0) {
-      return setDisputes(user)
-    }
+    setDisputes(user)
   }
 
   renderDisputes = () => {

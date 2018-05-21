@@ -38,17 +38,13 @@ export const setUser = () => {
 //Disputes
 
 export const setDisputes = user => {
+  console.log(user)
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: LOADING_DISPUTES })
+    const disputes = await factory.methods.getUserDisputes(user).call()
+    dispatch({ type: SET_DISPUTES, payload: disputes })
+    dispatch({ type: LOADING_STOP })
 
-    if (user === NO_USER) {
-      dispatch({ type: SET_DISPUTES, payload: [] })
-      dispatch({ type: LOADING_STOP })
-    } else {
-      const disputes = await factory.methods.getUserDisputes(user).call()
-      dispatch({ type: SET_DISPUTES, payload: disputes })
-      dispatch({ type: LOADING_STOP })
-    }
   }
 }
 

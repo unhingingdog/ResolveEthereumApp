@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 import MetamaskColor from '../assets/Metamask-icon-color.png'
 import MetamaskGrey from '../assets/Metamask-icon-greyscale.png'
@@ -16,13 +16,31 @@ export default ({ user, changeActive, active }) => {
 
   return(
     <Menu pointing secondary>
-      <Menu.Item name='Resolve' id='home' active={active === 'home'} onClick={changeActive} />
-      <Menu.Item name='' id='messages' active={active === 'messages'} onClick={changeActive} />
-
+      <Menu.Item
+        name='Resolve'
+        id='home'
+        onClick={changeActive}
+        as={ Link }
+        to='/'
+      />
       <Menu.Menu position='right'>
-        <Menu.Item name='Disputes' id='Disputes' active={active === 'Disputes'} onClick={changeActive} />
-        <Menu.Item name='New Dispute' id='New Dispute' active={active === 'New Dispute'} onClick={changeActive} />
-        <Menu.Item name='MetamaskIcon' active={active === 'New Dispute'}>
+        <Menu.Item
+          name='Disputes'
+          id='Disputes'
+          active={active === 'Disputes'}
+          onClick={changeActive}
+          as={ NavLink }
+          to='/disputes'
+        />
+        <Menu.Item
+          name='New Dispute'
+          id='New Dispute'
+          active={active === 'New Dispute'}
+          onClick={changeActive}
+          as={ NavLink }
+          to='/new'
+        />
+        <Menu.Item name='MetamaskIcon'>
           <img src={metaMaskStatus} alt="metamask icon" height="30" width="21" />
         </Menu.Item>
       </Menu.Menu>

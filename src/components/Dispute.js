@@ -8,7 +8,7 @@ import Issue from './Issue'
 class Dispute extends Component {
 
   render() {
-    console.log('DISPUTE PROPS:', this.props)
+    console.log(this.props.user, this.props.initiator, this.props.respondent)
     const { address } = this.props.match.params
     const { initiator, respondent, issuesCount, loading, user } = this.props
 
@@ -17,11 +17,13 @@ class Dispute extends Component {
         <h2>Initiator: {initiator}</h2>
         <h2>respondent: {respondent}</h2>
         <h2>issues: {issuesCount} </h2>
-        <Issue
-          disputeAddress={address}
-          loading={loading}
-          userAddress={user}
-        />
+        <div style={styles.issuesContainer}>
+          <Issue
+            disputeAddress={address}
+            loading={loading}
+            userAddress={user}
+          />
+        </div>
       </div>
     )
   }
@@ -30,6 +32,25 @@ class Dispute extends Component {
     const disputeAddress = this.props.match.params.address
     this.props.getDisputeDetails(disputeAddress)
   }
+
+//   userRole = () => {
+//     const { user, respondent, initiator } = this.props //arbitrator
+//
+//     switch(user) {
+//       case respondent:
+//         return 'respondent'
+//         break
+//       case initiator:
+//         return 'initiator'
+//         break
+//       case arbitrator:
+//         return 'arbitrator'
+//         break
+//       default:
+//        return ''
+//        break
+//     }
+//   }
 }
 
 const mapStateToProps = state => {
@@ -43,3 +64,9 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   getDisputeDetails,
 })(Dispute)
+
+const styles = {
+  issuesContainer: {
+    margin: '3%'
+  }
+}

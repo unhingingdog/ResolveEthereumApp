@@ -12,26 +12,16 @@ import Header from '../Header'
 export default function(ComposedComponent) {
   class InjectHeaderAndUserData extends Component {
     render() {
-
-      // if (this.isLoading() === LOADED) {
-        return(
-          <div>
-            <Header
-              user={this.props.user}
-              active={this.state.activeHeaderItem}
-              changeActive={this.changeActiveHeaderItem}
-            />
-            <ComposedComponent {...this.props} />
-          </div>
-        )
-      // }
-
-      // return(
-      //   <div>
-      //     <Header user={this.props.user} />
-      //     <Loading status={this.props.loading} />
-      //   </div>
-      // )
+      return(
+        <div>
+          <Header
+            user={this.props.user}
+            active={this.state.activeHeaderItem}
+            changeActive={this.changeActiveHeaderItem}
+          />
+          <ComposedComponent {...this.props} />
+        </div>
+      )
     }
 
     constructor(props) {
@@ -44,8 +34,6 @@ export default function(ComposedComponent) {
 
       if (!user) setUser()
     }
-
-    isLoading = () => this.props.loading
 
     changeActiveHeaderItem = event => {
       console.log(event.target.id)

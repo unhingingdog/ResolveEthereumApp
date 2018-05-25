@@ -10,7 +10,6 @@ import { setDisputes } from '../actions/contractActions'
 
 class DisputesIndex extends Component {
   render() {
-    console.log(this.props.disputes)
 
     if (this.props.user === NO_USER) {
       return <Redirect to="/" />

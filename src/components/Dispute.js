@@ -29,22 +29,24 @@ class Dispute extends Component {
           />
         </div>
 
-        <div style={styles.newIssue}>
-          <Accordion styled>
-            <Accordion.Title
-              active={newIssueActive}
-              onClick={() => this.setState({ newIssueActive: !newIssueActive})}
-            >
-              <h3>New Issue</h3>
-            </Accordion.Title>
-            <Accordion.Content active={newIssueActive}>
-            <NewIssue
-              disputeAddress={address}
-              user={user}
-             />
-            </Accordion.Content>
-          </Accordion>
-        </div>
+        { user === (respondent || initiator) &&
+          <div style={styles.newIssue}>
+            <Accordion styled>
+              <Accordion.Title
+                active={newIssueActive}
+                onClick={() => this.setState({ newIssueActive: !newIssueActive})}
+              >
+                <h3>New Issue</h3>
+              </Accordion.Title>
+              <Accordion.Content active={newIssueActive}>
+              <NewIssue
+                disputeAddress={address}
+                user={user}
+               />
+              </Accordion.Content>
+            </Accordion>
+          </div>
+        }
       </div>
     )
   }

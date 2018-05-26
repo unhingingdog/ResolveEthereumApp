@@ -9,7 +9,8 @@ import {
   Button,
   Dimmer,
   Loader,
-  Segment
+  Segment,
+  Accordion
 } from 'semantic-ui-react'
 
 import { LOADED, LOADING_ISSUES } from '../types'
@@ -30,7 +31,8 @@ class Issue extends Component {
     super(props)
 
     this.state = {
-      awardAmount: 0
+      awardAmount: 0,
+      activeIssue: 0
     }
   }
 
@@ -39,13 +41,12 @@ class Issue extends Component {
 
   }
 
-  // async componentDidUpdate() {
-  //   return this.props.getIssues(this.props.disputeAddress)
-  // }
+  setActiveIssue = activeIssue => {
+    this.setState({ activeIssue })
+  }
 
   renderIssueDetails = issues => {
     const { loading, user } = this.props
-    console.log(!!loading)
 
     return issues.map((issue, index) => {
       if (loading) {
@@ -57,101 +58,103 @@ class Issue extends Component {
       }
 
       return(
-        <Table celled striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell colSpan='3'>
-                 <h3><Icon name='balance scale' /> {issue.title}</h3>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+        <Accordion styled>
+          <Accordion.Title
+            active={this.state.activeIssue === index}
+            onClick={() => this.setActiveIssue(index)}
+          >
+            <h3><Icon name='balance scale' />{issue.title}</h3>
+          </Accordion.Title>
+          <Accordion.Content active={this.state.activeIssue === index}>
+            <Table celled striped>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell collapsing>
+                    <Icon name='user circle' /> Submitter
+                  </Table.Cell>
+                  <Table.Cell>{issue.submitter}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Icon name='user circle' /> Respondent
+                  </Table.Cell>
+                  <Table.Cell>{issue.acceptor}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Icon name='gavel' /> Arbitrator
+                  </Table.Cell>
+                  <Table.Cell>{issue.arbitrator}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                     Arbitrator Fee
+                  </Table.Cell>
+                  <Table.Cell>
+                    {web3.utils.fromWei(issue.arbitratorFee, 'ether')} eth
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                     Issue Stake
+                  </Table.Cell>
+                  <Table.Cell>
+                    {web3.utils.fromWei(issue.funds, 'ether')} eth
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    Accepted
+                  </Table.Cell>
+                  <Table.Cell>
+                    {issue.accepted ?
+                        <Icon color='green' name='checkmark' size='large' /> :
+                        <Icon color='yellow' name='close' size='large' />
+                    }
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    Decided
+                  </Table.Cell>
+                  <Table.Cell>
+                    {issue.settled ?
+                      <Icon color='green' name='checkmark' size='large' /> :
+                      <Icon color='yellow' name='close' size='large' />
+                    }
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
 
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell collapsing>
-                <Icon name='user circle' /> Submitter
-              </Table.Cell>
-              <Table.Cell>{issue.submitter}</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>
-                <Icon name='user circle' /> Respondent
-              </Table.Cell>
-              <Table.Cell>{issue.acceptor}</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>
-                <Icon name='gavel' /> Arbitrator
-              </Table.Cell>
-              <Table.Cell>{issue.arbitrator}</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>
-                 Arbitrator Fee
-              </Table.Cell>
-              <Table.Cell>
-                {web3.utils.fromWei(issue.arbitratorFee, 'ether')} eth
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>
-                 Issue Stake
-              </Table.Cell>
-              <Table.Cell>
-                {web3.utils.fromWei(issue.funds, 'ether')} eth
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>
-                Accepted
-              </Table.Cell>
-              <Table.Cell>
-                {issue.accepted ?
-                    <Icon color='green' name='checkmark' size='large' /> :
-                    <Icon color='yellow' name='close' size='large' />
+            <Table.Footer fullWidth>
+              <Table.Row collapsing>
+                { user === issue.respondent && !issue.accepted &&
+                  <Table.HeaderCell colSpan='4'>
+                    <Button
+                      inverted
+                      size='small'
+                      color='green'
+                      onClick={this.acceptIssue}
+                      id={index}
+                    >
+                      Accept
+                    </Button>
+                  </Table.HeaderCell>
                 }
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>
-                Decided
-              </Table.Cell>
-              <Table.Cell>
-                {issue.settled ?
-                  <Icon color='green' name='checkmark' size='large' /> :
-                  <Icon color='yellow' name='close' size='large' />
+              </Table.Row>
+              <Table.Row>
+                { user === issue.arbitrator &&
+                  <Table.HeaderCell colSpan='4'>
+                  sdfsdfsdfasdf
+                    <Button size='small'>Approve</Button>
+                    <Button disabled size='small'>Approve All</Button>
+                  </Table.HeaderCell>
                 }
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-
-        <Table.Footer fullWidth>
-          <Table.Row collapsing>
-            { user === issue.respondent && !issue.accepted &&
-              <Table.HeaderCell colSpan='4'>
-                <Button
-                  inverted
-                  size='small'
-                  color='green'
-                  onClick={this.acceptIssue}
-                  id={index}
-                >
-                  Accept
-                </Button>
-              </Table.HeaderCell>
-            }
-          </Table.Row>
-          <Table.Row>
-            { user === issue.arbitrator &&
-              <Table.HeaderCell colSpan='4'>
-              sdfsdfsdfasdf
-                <Button size='small'>Approve</Button>
-                <Button disabled size='small'>Approve All</Button>
-              </Table.HeaderCell>
-            }
-          </Table.Row>
-        </Table.Footer>
-      </Table>
+              </Table.Row>
+            </Table.Footer>
+          </Table>
+        </Accordion.Content>
+      </Accordion>
 
       )
     })

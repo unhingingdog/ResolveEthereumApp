@@ -18,7 +18,7 @@ export const CREATING_DISPUTE = 'creatingDispute'
 export const CREATING_ISSUE = 'creatingIssue'
 export const ACCEPTING_ISSUE = 'acceptingIssue'
 export const SETTLING_ISSUE = 'settlingIssue'
-export const LOADED = 'loaded'
+export const LOADED = ''
 
 //user account types
 export const NO_USER = 'NONE'

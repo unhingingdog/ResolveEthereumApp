@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import Redux from 'redux'
 import { connect } from 'react-redux'
 
-import Loading from '../Loading'
 import { LOADED } from '../../types'
 import { setUser } from '../../actions/contractActions'
 

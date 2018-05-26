@@ -55,6 +55,8 @@ contract Dispute {
             _acceptor = initiator;
         }
 
+        userDisputes[_arbitrator].push(dispute);
+
         Issue memory newIssue = Issue({
             title: _title,
             submitter: msg.sender,

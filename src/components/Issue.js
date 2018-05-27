@@ -9,8 +9,9 @@ import {
   Button,
   Dimmer,
   Loader,
-  Segment,
-  Accordion
+  Input,
+  Accordion,
+  Label
 } from 'semantic-ui-react'
 
 import {
@@ -56,6 +57,7 @@ class Issue extends Component {
     const { loading, user } = this.props
 
     return issues.map((issue, index) => {
+      console.log(user === issue.respondent)
       return(
         <Accordion styled>
           <Accordion.Title
@@ -90,7 +92,7 @@ class Issue extends Component {
                      Arbitrator Fee
                   </Table.Cell>
                   <Table.Cell>
-                    {web3.utils.fromWei(issue.arbitratorFee, 'ether')} eth
+                    {web3.utils.fromWei(issue.arbitratorFee, 'ether')} ETH
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -98,7 +100,7 @@ class Issue extends Component {
                      Issue Stake
                   </Table.Cell>
                   <Table.Cell>
-                    {web3.utils.fromWei(issue.funds, 'ether')} eth
+                    {web3.utils.fromWei(issue.funds, 'ether')} ETH
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -127,7 +129,7 @@ class Issue extends Component {
 
             <Table.Footer fullWidth>
               <Table.Row collapsing>
-                { user === issue.respondent && !issue.accepted &&
+                { user === issue.acceptor && !issue.accepted &&
                   <Table.HeaderCell colSpan='4'>
                     <Button
                       inverted
@@ -144,9 +146,19 @@ class Issue extends Component {
               <Table.Row>
                 { user === issue.arbitrator &&
                   <Table.HeaderCell colSpan='4'>
-                  sdfsdfsdfasdf
-                    <Button size='small'>Approve</Button>
-                    <Button disabled size='small'>Approve All</Button>
+                    <Input
+                      label="Award amount"
+                      type="number"
+                    >
+                      <Label basic>Award</Label>
+                      <input />
+                      <Label>ETH</Label>
+                    </Input>
+                    <Button.Group floated='right'>
+                      <Button primary>{issue.submitter.substr(0, 8)}</Button>
+                      <Button.Or />
+                      <Button positive>{issue.acceptor.substr(0, 8)}</Button>
+                    </Button.Group>
                   </Table.HeaderCell>
                 }
               </Table.Row>
@@ -165,21 +177,20 @@ class Issue extends Component {
   }
 
   acceptIssue = event => {
-    console.log(event)
-    const { acceptIssue, disputeAddress, userAddress, issues } = this.props
+    const { acceptIssue, disputeAddress, user, issues } = this.props
     const { id: issueIndex } = event.target
     const stake = issues[issueIndex].funds
 
-    acceptIssue(userAddress, disputeAddress, issueIndex, stake)
+    acceptIssue(user, disputeAddress, issueIndex, stake)
   }
 
   settleIssue = (event, winnerAddress) => {
-    const { disputeAddress, settleIssue, userAddress } = this.props
+    const { disputeAddress, settleIssue, user } = this.props
     const { id: issueIndex } = event.target
     const { awardAmount } = this.state
 
     settleIssue(
-      userAddress,
+      user,
       disputeAddress,
       issueIndex,
       winnerAddress,
@@ -199,3 +210,34 @@ export default connect(mapStateToProps, {
   acceptIssue,
   settleIssue
 })(Issue)
+
+// <div key={index + '-' + this.props.disputeAddress}>
+//   <h3>Issue: {issue.title}</h3>
+//   <h3>submitter: {issue.submitter}</h3>
+//   <h3>acceptor: {issue.acceptor}</h3>
+//   <h3>arbitrator: {issue.arbitrator}</h3>
+//   <h3>arbitratorFee: {web3.utils.fromWei(issue.arbitratorFee)} eth</h3>
+//   <h3>accepted: {issue.accepted ? 'true' : 'false'}</h3>
+//   <h3>resolved: {issue.resolved ? 'true' : 'false'}</h3>
+//   <h3>funds: {web3.utils.fromWei(issue.funds, 'ether')} eth</h3>
+//   <button id={index} onClick={this.acceptIssue}>accept</button>
+//   <input
+//     type="number"
+//     value={this.state.awardAmount}
+//     onChange={this.handleInputChange}
+//     id="awardAmount"
+//   />
+//   Settle
+//   <button
+//     id={index}
+//     onClick={e => this.settleIssue(e, issue.submitter)}
+//   >
+//     submitter ({issue.submitter})
+//   </button>
+//   <button
+//     id={index}
+//     onClick={e => this.settleIssue(e, issue.acceptor)}
+//   >
+//     acceptor ({issue.acceptor})
+//   </button>
+// </div>

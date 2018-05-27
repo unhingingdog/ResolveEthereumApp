@@ -25,7 +25,7 @@ export default ({ user, changeActive, active, loading }) => {
   }
 
   return(
-    <Menu pointing secondary top attached>
+    <Menu pointing secondary top attached style={styles.header}>
       <Menu.Item
         name="Resolve"
         id="home"
@@ -35,27 +35,33 @@ export default ({ user, changeActive, active, loading }) => {
       />
       <Menu.Menu position="right">
         { user !== NO_USER &&
-          <div>
-            <Menu.Item
-              name="Disputes"
-              id="Disputes"
-              active={active === 'Disputes'}
-              onClick={changeActive}
-              as={ NavLink }
-              to="/disputes"
-            />
-            <Menu.Item
-              name="New Dispute"
-              id="New Dispute"
-              active={active === 'New Dispute'}
-              onClick={changeActive}
-              as={ NavLink }
-              to="/new"
-            />
-          </div>
+          <Menu.Item
+            name="Disputes"
+            id="Disputes"
+            active={active === 'Disputes'}
+            onClick={changeActive}
+            as={ NavLink }
+            to="/disputes"
+          />
+        }
+        { user !== NO_USER &&
+          <Menu.Item
+            name="New Dispute"
+            id="New Dispute"
+            active={active === 'New Dispute'}
+            onClick={changeActive}
+            as={ NavLink }
+            to="/new"
+          />
         }
         { user === NO_USER &&
-            <Menu.Item>Log into Metamask to start</Menu.Item>
+          <Menu.Item>
+            Log into
+            <a href="https://metamask.io/">
+              &nbsp; Metamask &nbsp;
+            </a>
+            to start
+          </Menu.Item>
         }
         <Menu.Item name='MetamaskIcon'>
           <img src={metaMaskStatus} alt="metamask icon" height="30" width="21" />
@@ -68,5 +74,8 @@ export default ({ user, changeActive, active, loading }) => {
 const styles = {
   dimmer: {
      position: 'fixed'
+  },
+  header: {
+    background: 'white'
   }
 }

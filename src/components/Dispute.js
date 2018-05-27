@@ -27,7 +27,7 @@ class Dispute extends Component {
           <Issue
             disputeAddress={address}
             loading={loading}
-            userAddress={user}
+            user={user}
           />
         </div>
 

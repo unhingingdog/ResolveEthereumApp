@@ -17,6 +17,7 @@ export default function(ComposedComponent) {
             user={this.props.user}
             active={this.state.activeHeaderItem}
             changeActive={this.changeActiveHeaderItem}
+            loading={this.props.loading}
           />
           <ComposedComponent {...this.props} />
         </div>

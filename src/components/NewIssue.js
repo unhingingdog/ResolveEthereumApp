@@ -8,11 +8,6 @@ import { createIssue } from '../actions/contractActions'
 
 class NewIssue extends Component {
   render() {
-
-    if (this.submissionIsComplete()) {
-      return <Redirect to={`/dispute/${this.props.disputeAddress}`} />
-    }
-
     return(
       <div>
         <Form onSubmit={this.handleSubmit} style={styles.form}>
@@ -57,16 +52,12 @@ class NewIssue extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      issueTitle: '',
-      arbitratorAddress: '',
-      stake: 0,
-      arbitratorFee: 0,
-      submissionComplete: false
-    }
+    this.state = defaultState
   }
 
-  submissionIsComplete = () => this.state.submissionComplete
+  componentWillUpdate() {
+    if (this.state.submissionComplete) this.setState(defaultState)
+  }
 
   handleInputChange = event => {
     const { id, value } = event.target
@@ -97,6 +88,14 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, { createIssue })(NewIssue)
+
+const defaultState = {
+  issueTitle: '',
+  arbitratorAddress: '',
+  stake: 0,
+  arbitratorFee: 0,
+  submissionComplete: false
+}
 
 const styles = {
   form: {

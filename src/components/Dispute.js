@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
-import { getDisputeDetails } from '../actions/contractActions'
+import { getDisputeDetails, getIssues } from '../actions/contractActions'
 import { Accordion } from 'semantic-ui-react'
 
 import NewIssue from './NewIssue'
 import Issue from './Issue'
+
+import { CREATING_ISSUE } from '../types'
 
 class Dispute extends Component {
 
@@ -64,6 +66,14 @@ class Dispute extends Component {
     this.props.getDisputeDetails(disputeAddress)
   }
 
+  componentDidUpdate(prevProps) {
+    const disputeAddress = this.props.match.params.address
+    if (prevProps.loading === CREATING_ISSUE)  {
+      this.props.getIssues(disputeAddress)
+      this.setState({ newIssueActive: false })
+    }
+  }
+
   userRole = () => {
     const { user, respondent, initiator } = this.props
 
@@ -91,6 +101,7 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   getDisputeDetails,
+  getIssues
 })(Dispute)
 
 const styles = {

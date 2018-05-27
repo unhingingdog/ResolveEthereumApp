@@ -98,12 +98,9 @@ export const createIssue = (
   arbitratorAddress,
   arbitratorFee
 ) => {
-  console.log('CREATE ISSUE FIRED')
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: CREATING_ISSUE })
     const dispute = await Dispute(disputeAddress)
-
-    console.log(web3.utils.toWei(arbitratorFee, 'ether'))
 
     try {
       await dispute.methods.createIssue
@@ -116,12 +113,10 @@ export const createIssue = (
           from: userAddress,
           value: web3.utils.toWei(stake, 'ether')
          })
-        console.log('issue deployed')
-
     } catch (error) {
       console.log(error)
     }
-
+    
     dispatch({ type: LOADING_STOP })
   }
 }

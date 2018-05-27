@@ -3,15 +3,23 @@ import { Link, NavLink } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 import MetamaskColor from '../assets/Metamask-icon-color.png'
 import MetamaskGrey from '../assets/Metamask-icon-greyscale.png'
+import { Dimmer, Loader } from 'semantic-ui-react'
 
-
-export default ({ user, changeActive, active }) => {
+export default ({ user, changeActive, active, loading }) => {
   let metaMaskStatus
 
   if (user === 'NONE') {
     metaMaskStatus = MetamaskGrey
   } else {
     metaMaskStatus = MetamaskColor
+  }
+
+  if (loading) {
+    return(
+      <Dimmer active style={styles.dimmer}>
+        <Loader size="massive">{loading}</Loader>
+      </Dimmer>
+    )
   }
 
   return(
@@ -71,5 +79,8 @@ const styles = {
   },
   headerButton: {
     textAlign: 'center'
+  },
+  dimmer: {
+     position: 'fixed'
   }
 }

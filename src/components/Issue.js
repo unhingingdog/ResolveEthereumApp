@@ -17,7 +17,8 @@ import {
 import {
   LOADED,
   LOADING_ISSUES,
-  ACCEPTING_ISSUE
+  ACCEPTING_ISSUE,
+  SETTLING_ISSUE
 } from '../types'
 
 import {
@@ -47,6 +48,7 @@ class Issue extends Component {
   async componentDidUpdate(prevProps) {
     const { getIssues, disputeAddress} = this.props
     if (prevProps.loading === ACCEPTING_ISSUE) getIssues(disputeAddress)
+    if (prevProps.loading === SETTLING_ISSUE) getIssues(disputeAddress)
   }
 
   setActiveIssue = activeIssue => {
@@ -57,6 +59,7 @@ class Issue extends Component {
     const { loading, user } = this.props
 
     return issues.map((issue, index) => {
+      console.log(issue.resolved)
       console.log(user === issue.respondent)
       return(
         <Accordion styled>
@@ -119,7 +122,7 @@ class Issue extends Component {
                     Decided
                   </Table.Cell>
                   <Table.Cell>
-                    {issue.settled ?
+                    {issue.resolved ?
                       <Icon color='green' name='checkmark' size='large' /> :
                       <Icon color='yellow' name='close' size='large' />
                     }
@@ -144,20 +147,35 @@ class Issue extends Component {
                 }
               </Table.Row>
               <Table.Row>
-                { user === issue.arbitrator &&
+                { user === issue.arbitrator && !issue.resolved &&
                   <Table.HeaderCell colSpan='4'>
                     <Input
                       label="Award amount"
                       type="number"
+                      value={this.state.awardAmount}
+                      onChange={this.handleInputChange}
+                      id="awardAmount"
                     >
                       <Label basic>Award</Label>
                       <input />
                       <Label>ETH</Label>
                     </Input>
                     <Button.Group floated='right'>
-                      <Button primary>{issue.submitter.substr(0, 8)}</Button>
+                      <Button
+                        primary
+                        onClick={e => this.settleIssue(e, issue.submitter)}
+                        id={index}
+                      >
+                        {issue.submitter.substr(0, 8)}
+                      </Button>
                       <Button.Or />
-                      <Button positive>{issue.acceptor.substr(0, 8)}</Button>
+                      <Button
+                        positive
+                        onClick={e => this.settleIssue(e, issue.acceptor)}
+                        id={index}
+                      >
+                        {issue.acceptor.substr(0, 8)}
+                      </Button>
                     </Button.Group>
                   </Table.HeaderCell>
                 }
@@ -188,6 +206,11 @@ class Issue extends Component {
     const { disputeAddress, settleIssue, user } = this.props
     const { id: issueIndex } = event.target
     const { awardAmount } = this.state
+    console.log('user: ', user)
+    console.log('disputeAddress: ', disputeAddress)
+    console.log('issueIndex: ', issueIndex)
+    console.log('winnerAddress: ', winnerAddress)
+    console.log('awardAmount: ', awardAmount)
 
     settleIssue(
       user,

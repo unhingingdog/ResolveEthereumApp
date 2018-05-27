@@ -116,7 +116,7 @@ export const createIssue = (
     } catch (error) {
       console.log(error)
     }
-    
+
     dispatch({ type: LOADING_STOP })
   }
 }
@@ -155,12 +155,10 @@ export const settleIssue = (
         .send({
           from: userAddress
         })
-
-      dispatch({ type: LOADING_STOP })
     } catch (error) {
       console.log(error)
     }
-
+    dispatch({ type: LOADING_STOP })
   }
 }
 

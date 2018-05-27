@@ -12,7 +12,7 @@ class NewIssue extends Component {
       <div>
         <Form onSubmit={this.handleSubmit} style={styles.form}>
             <Form.Input
-              label="Title             "
+              label="Title"
               type="text"
               id="issueTitle"
               value={this.state.issueTitle}

@@ -59,8 +59,6 @@ class Issue extends Component {
     const { loading, user } = this.props
 
     return issues.map((issue, index) => {
-      console.log(issue.resolved)
-      console.log(user === issue.respondent)
       return(
         <Accordion styled>
           <Accordion.Title
@@ -163,7 +161,7 @@ class Issue extends Component {
                     <Button.Group floated='right'>
                       <Button
                         primary
-                        onClick={e => this.settleIssue(e, issue.submitter)}
+                        onClick={(e => this.settleIssue(e, issue.submitter))}
                         id={index}
                       >
                         {issue.submitter.substr(0, 8)}
@@ -206,11 +204,6 @@ class Issue extends Component {
     const { disputeAddress, settleIssue, user } = this.props
     const { id: issueIndex } = event.target
     const { awardAmount } = this.state
-    console.log('user: ', user)
-    console.log('disputeAddress: ', disputeAddress)
-    console.log('issueIndex: ', issueIndex)
-    console.log('winnerAddress: ', winnerAddress)
-    console.log('awardAmount: ', awardAmount)
 
     settleIssue(
       user,
@@ -233,34 +226,3 @@ export default connect(mapStateToProps, {
   acceptIssue,
   settleIssue
 })(Issue)
-
-// <div key={index + '-' + this.props.disputeAddress}>
-//   <h3>Issue: {issue.title}</h3>
-//   <h3>submitter: {issue.submitter}</h3>
-//   <h3>acceptor: {issue.acceptor}</h3>
-//   <h3>arbitrator: {issue.arbitrator}</h3>
-//   <h3>arbitratorFee: {web3.utils.fromWei(issue.arbitratorFee)} eth</h3>
-//   <h3>accepted: {issue.accepted ? 'true' : 'false'}</h3>
-//   <h3>resolved: {issue.resolved ? 'true' : 'false'}</h3>
-//   <h3>funds: {web3.utils.fromWei(issue.funds, 'ether')} eth</h3>
-//   <button id={index} onClick={this.acceptIssue}>accept</button>
-//   <input
-//     type="number"
-//     value={this.state.awardAmount}
-//     onChange={this.handleInputChange}
-//     id="awardAmount"
-//   />
-//   Settle
-//   <button
-//     id={index}
-//     onClick={e => this.settleIssue(e, issue.submitter)}
-//   >
-//     submitter ({issue.submitter})
-//   </button>
-//   <button
-//     id={index}
-//     onClick={e => this.settleIssue(e, issue.acceptor)}
-//   >
-//     acceptor ({issue.acceptor})
-//   </button>
-// </div>

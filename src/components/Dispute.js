@@ -18,9 +18,9 @@ class Dispute extends Component {
     const { newIssueActive } = this.state
 
     return(
-      <div>
+      <div style={styles.container}>
         <div style={styles.disputeDetails}>
-          <h3>{this.userRole()} ({issuesCount} issues)</h3>
+          <h2>{this.userRole()} ({issuesCount} issues)</h2>
         </div>
 
         <div style={styles.issuesContainer}>
@@ -105,13 +105,20 @@ export default connect(mapStateToProps, {
 })(Dispute)
 
 const styles = {
-  issuesContainer: {
-    margin: '3%'
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    background: "linear-gradient(-45deg, #4f69ff 0%, #60abf8 99%, #4096ee 100%)"
   },
   disputeDetails: {
-    margin: '3%'
+    marginTop: 30,
+    marginBottom: 30,
+    color: 'white'
   },
   newIssue: {
-    margin: '3%'
+    marginTop: 30,
+    color: "linear-gradient(-45deg, #4f69ff 0%, #60abf8 99%, #4096ee 100%)",
+    marginBottom: 30
   }
 }

@@ -12,12 +12,12 @@ export const LOADING_STOP = 'loadingStop'
 
 
 //loading types
-export const LOADING_DISPUTES = 'loadingDisputes'
-export const LOADING_ISSUES = 'loadingIssues'
-export const CREATING_DISPUTE = 'creatingDispute'
-export const CREATING_ISSUE = 'creatingIssue'
-export const ACCEPTING_ISSUE = 'acceptingIssue'
-export const SETTLING_ISSUE = 'settlingIssue'
+export const LOADING_DISPUTES = 'Loading your disputes. Hold tight...'
+export const LOADING_ISSUES = 'Loading your issues. Hold tight...'
+export const CREATING_DISPUTE = 'Creating your dispute. This takes around 15 seconds.'
+export const CREATING_ISSUE = 'Creating issue. This takes around 15 seconds.'
+export const ACCEPTING_ISSUE = 'Accepting issue. This takes around 15 seconds.'
+export const SETTLING_ISSUE = 'Settling issue. This takes around 15 seconds.'
 export const LOADED = ''
 
 //user account types

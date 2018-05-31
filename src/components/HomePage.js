@@ -4,6 +4,8 @@ import squid from '../assets/squid.png'
 import mainScreenshot from '../assets/main-screenshot.png'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 
+import Step from './Step'
+
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel'
 
 export default (props) => {
@@ -14,7 +16,7 @@ export default (props) => {
           <img src={squid} width="230" height="230" />
         </div>
         <h1 style={styles.title}>Judgment Squid</h1>
-        <p style={styles.blurb}>The cheap, secure way to settle your beef.</p>
+        <p style={styles.blurb}>The cheap, secure way to settle your dispute.</p>
       </div>
       <div style={styles.midContainer}>
 
@@ -33,6 +35,7 @@ const styles = {
   },
   midContainer: {
     background: 'white',
+    color: 'black',
     height: 300
   },
   title: {

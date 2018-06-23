@@ -129,9 +129,11 @@ export default class Issue extends Component {
 
   constructor(props) {
     super(props)
+    const { funds, arbitratorFee } = this.props.issueDetails
+    const defaultAward = (funds - arbitratorFee).toString()
 
     this.state = {
-      awardAmount: web3.utils.fromWei(this.props.issueDetails.funds, 'ether')
+      awardAmount: web3.utils.fromWei(defaultAward, 'ether')
     }
   }
 

@@ -38,7 +38,6 @@ export const setUser = () => {
 //Disputes
 
 export const setDisputes = user => {
-  console.log(user)
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: LOADING_DISPUTES })
     const disputes = await factory.methods.getUserDisputes(user).call()
@@ -73,13 +72,11 @@ export const getDisputeDetails = address => {
 export const createDispute = (userAddress, respondentAddress) => {
   return async dispatch => {
       dispatch({ type: LOADING_START, payload: CREATING_DISPUTE })
-      console.log('creating dispute ', respondentAddress)
 
       try {
         await factory.methods.createDispute(respondentAddress).send({
           from: userAddress
         })
-        console.log('transaction complete')
       } catch(error) {
         console.log(error)
       }
@@ -129,7 +126,7 @@ export const acceptIssue = (userAddress, disputeAddress, issueIndex, stake) => {
     try {
       await dispute.methods.acceptIssue(issueIndex).send({
         from: userAddress,
-        value: stake
+        value: web3.utils.toWei(stake, 'ether')
       })
       dispatch({ type: LOADING_STOP })
     } catch (error) {
@@ -148,7 +145,7 @@ export const settleIssue = (
   return async dispatch => {
     dispatch({ type: LOADING_START, payload: SETTLING_ISSUE })
     const dispute = Dispute(disputeAddress)
-    awardAmount = web3.utils.toWei(awardAmount, 'ether')
+    awardAmount = web3.utils.toWei(awardAmount, 'ether').toString()
 
     try {
       await dispute.methods.settleIssue(issueIndex, winnerAddress, awardAmount)

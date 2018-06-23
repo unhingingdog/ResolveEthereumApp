@@ -5,14 +5,13 @@ import { getDisputeDetails, getIssues } from '../actions/contractActions'
 import { Accordion } from 'semantic-ui-react'
 
 import NewIssue from './NewIssue'
-import Issue from './Issue'
+import Issues from './Issues'
 
 import { CREATING_ISSUE } from '../types'
 
 class Dispute extends Component {
 
   render() {
-    console.log(this.props.user, this.props.initiator, this.props.respondent)
     const { address } = this.props.match.params
     const { initiator, respondent, issuesCount, loading, user } = this.props
     const { newIssueActive } = this.state
@@ -24,7 +23,7 @@ class Dispute extends Component {
         </div>
 
         <div style={styles.issuesContainer}>
-          <Issue
+          <Issues
             disputeAddress={address}
             loading={loading}
             user={user}

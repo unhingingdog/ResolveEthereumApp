@@ -19,6 +19,7 @@ export default props => {
           </div>
           <h1 style={styles.title}>Judgment Squid</h1>
           <p style={styles.blurb}>The cheap, secure way to settle your dispute.</p>
+          <p style={styles.disclaimer}>(Currently running on Ethereum's Rinkeby test network.)</p>
         </div>
       </BrowserView>
 
@@ -58,5 +59,10 @@ const styles = {
   blurb: {
     color: 'white',
     fontSize: 20
+  },
+  disclaimer: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: -17
   }
 }

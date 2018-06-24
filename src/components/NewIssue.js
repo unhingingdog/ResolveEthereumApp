@@ -34,6 +34,8 @@ class NewIssue extends Component {
               value={this.state.stake}
               onChange={this.handleInputChange}
               style={styles.input}
+              min="0"
+              step="0.01"
             />
             <Form.Input
               label="fee"
@@ -42,6 +44,8 @@ class NewIssue extends Component {
               value={this.state.arbitratorFee}
               onChange={this.handleInputChange}
               style={styles.input}
+              min="0"
+              step="0.01"
             />
           <Button primary type="submit">Submit</Button>
         </Form>

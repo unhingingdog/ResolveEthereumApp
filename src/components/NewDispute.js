@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Redux from 'redux'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { Input, Button, Icon } from 'semantic-ui-react'
 
 import { createDispute } from '../actions/contractActions'
 
@@ -12,18 +13,23 @@ class NewDisupte extends Component {
     }
 
     return(
-      <div>
-        <h1>New Dispute</h1>
-        <form onSubmit={this.handleSubmit} >
-          <label>
-            Respondent Address:
-            <input
-              type="text"
-              value={this.state.text}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
+      <div style={styles.container}>
+        <h1 style={styles.title}>New Dispute</h1>
+        <form onSubmit={this.handleSubmit} style={styles.form}>
+          <Input
+            fluid
+            label="Respondent Address"
+            value={this.state.text}
+            onChange={this.handleChange}
+            icon={<Icon
+              name="briefcase"
+              inverted
+              circular
+              link
+              onClick={this.handleSubmit}
+            />}
+            onSubmit={this.handleSubmit}
+          />
         </form>
       </div>
     )
@@ -61,3 +67,22 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, { createDispute })(NewDisupte)
+
+const styles = {
+  container: {
+    background: 'linear-gradient(135deg, #ff0000 0%,#ff7f00 100%)',
+    height: '91vh',
+    display: 'flex',
+    alignItems: 'center',
+    color: 'white',
+    flexDirection: 'column'
+  },
+  title: {
+    marginTop: '35vh',
+    fontSize: 40
+  },
+  form: {
+    width: '80vw',
+    paddingTop: 20
+  }
+}

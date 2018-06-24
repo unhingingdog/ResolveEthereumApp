@@ -4,7 +4,7 @@ import { Menu } from 'semantic-ui-react'
 import MetamaskColor from '../assets/Metamask-icon-color.png'
 import MetamaskGrey from '../assets/Metamask-icon-greyscale.png'
 import fullSquid from '../assets/full-squid.png'
-import { Dimmer, Loader } from 'semantic-ui-react'
+import { Dimmer, Loader, Icon } from 'semantic-ui-react'
 
 import { NO_USER } from '../types'
 
@@ -34,7 +34,7 @@ export default ({ user, changeActive, active, loading }) => {
         as={ Link }
         to="/"
       >
-        <img src={fullSquid} alt="metamask icon" height="40" width="25" />
+        <Icon name="home" size="large" circular color="teal" inverted />
       </Menu.Item>
       <Menu.Menu position="right">
         { user !== NO_USER &&

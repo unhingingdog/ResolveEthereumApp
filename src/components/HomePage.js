@@ -33,7 +33,7 @@ export default props => {
                 associated with centrally administered arbitration.
               </p>
               <p>
-                (Currently running on Ethereums Rinkeby test network.)
+                (Currently running on Ethereum's Rinkeby test network.)
               </p>
             </div>
           </div>
@@ -112,5 +112,6 @@ const styles = {
     color: 'white',
     fontFamily: 'Quicksand, san-serif',
     fontSize: 12,
+
   }
 }

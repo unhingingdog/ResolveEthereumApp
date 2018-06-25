@@ -10,13 +10,15 @@ import { setDisputes } from '../actions/contractActions'
 
 class DisputesIndex extends Component {
   render() {
-
     if (this.props.user === NO_USER) {
       return <Redirect to="/" />
     }
 
     return(
+      <div style={styles.addresses}>
+        <h1>Your Disputes</h1>
         <h3>{this.renderDisputes()}</h3>
+      </div>
     )
   }
 
@@ -26,12 +28,12 @@ class DisputesIndex extends Component {
   }
 
   renderDisputes = () => {
-    return this.props.disputes.map((dispute, key) => {
+    return this.props.disputes.map((dispute, index) => {
       const url = `/dispute/${dispute}`
 
       return(
         <Link to={url}>
-          <h3 key={key}>{dispute}</h3>
+          <h3 key={index + 'dispute'}>{dispute}</h3>
         </Link>
       )
     })
@@ -45,3 +47,9 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, { setDisputes })(DisputesIndex)
+
+const styles = {
+  addresses: {
+    margin: 30
+  }
+}

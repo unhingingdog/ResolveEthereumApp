@@ -34,7 +34,7 @@ export default ({ user, changeActive, active, loading }) => {
         as={ Link }
         to="/"
       >
-        <Icon name="home" size="large" circular color="teal" inverted />
+        <Icon name="home" size="large" circular color="orange" inverted />
       </Menu.Item>
       <Menu.Menu position="right">
         { user !== NO_USER &&

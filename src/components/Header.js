@@ -3,7 +3,6 @@ import { Link, NavLink } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 import MetamaskColor from '../assets/Metamask-icon-color.png'
 import MetamaskGrey from '../assets/Metamask-icon-greyscale.png'
-import fullSquid from '../assets/full-squid.png'
 import { Dimmer, Loader, Icon } from 'semantic-ui-react'
 
 import { NO_USER } from '../types'

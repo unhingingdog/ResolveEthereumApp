@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { BrowserView, isMobile, isBrowser } from 'react-device-detect'
 import squid from '../assets/squid.png'
 import mainScreenshot from '../assets/main-screenshot.png'
 import 'pure-react-carousel/dist/react-carousel.es.css'
@@ -10,7 +9,6 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-re
 export default props => {
   return(
     <div>
-      <BrowserView device={isBrowser}>
         <div style={styles.topContainer}>
           <div style={styles.logo}>
             <img src={squid} width="230" height="230" />
@@ -41,11 +39,6 @@ export default props => {
         <div style={styles.lowerContainer}>
           <p style={styles.copyRight}>Hamish Gilkison</p>
         </div>
-      </BrowserView>
-
-      <BrowserView device={isMobile}>
-        <p>mobile</p>
-      </BrowserView>
     </div>
   )
 }
